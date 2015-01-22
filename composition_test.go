@@ -9,7 +9,7 @@ func TestAllComposition(t *testing.T) {
 
 	for i := 1; i < len(cases); i++ {
 		a, b := cases[i-1], cases[i]
-		strategry := All{&SimpleStrategy{Tries: a}, &SimpleStrategy{Tries: b}}
+		strategry := All{&CountStrategy{Tries: a}, &CountStrategy{Tries: b}}
 		tryCase(t, strategry, testCase{
 			name:     []int{a, b},
 			attempts: b + 1,
@@ -25,7 +25,7 @@ func TestAnyComposition(t *testing.T) {
 
 	for i := 1; i < len(cases); i++ {
 		a, b := cases[i-1], cases[i]
-		strategry := Any{&SimpleStrategy{Tries: a}, &SimpleStrategy{Tries: b}}
+		strategry := Any{&CountStrategy{Tries: a}, &CountStrategy{Tries: b}}
 		tryCase(t, strategry, testCase{
 			name:     []int{a, b},
 			attempts: b + 1,

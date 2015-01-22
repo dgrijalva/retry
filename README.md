@@ -6,7 +6,7 @@ Some examples:
 
 ```go
 // A very basic example.
-strategy := &retry.SimpleStrategy{Tries: 3}
+strategy := &retry.CountStrategy{Tries: 3}
 for done := false; !done && strategy.Next() {
 	done = trySomething()
 }
@@ -16,7 +16,7 @@ for done := false; !done && strategy.Next() {
 // Compose a few strategies together
 // Try not more than 3 times, with a 100ms delay between attempts
 strategy := &retry.All{
-	&retry.SimpleStrategy{Tries: 3},
+	&retry.CountStrategy{Tries: 3},
 	&retry.DelayStrategy{Delay: 100 * time.Millisecond},
 }
 
@@ -35,7 +35,7 @@ strategy := &retry.Any{
 		&retry.DelayStrategy{Delay: 100 * time.Millisecond},
 		&retry.MaximumTimeStrategy{Duration: 10 * time.Second},
 	},
-	&retry.SimpleStrategy{Tries: 3},
+	&retry.CountStrategy{Tries: 3},
 }
 
 for done := false; !done && strategy.Next() {
@@ -54,7 +54,7 @@ func doComplexThings(strategy retry.Strategy)bool{
 	return false
 }
 
-doComplexThings(&retry.SimpleStrategy{Tries: 3})
+doComplexThings(&retry.CountStrategy{Tries: 3})
 doComplexThings(&retry.MaximumTimeStrategy{Duration: 10 * time.Second})
 ```
 
