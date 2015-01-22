@@ -2,7 +2,7 @@ package retry
 
 // A composite strategy.  In order for Next or HasNext to
 // succeed, all of the included strategies must succeed
-type All []RetryStrategy
+type All []Strategy
 
 func (s All) Next() bool {
 	for _, ss := range s {
@@ -24,7 +24,7 @@ func (s All) HasNext() bool {
 
 // A composite strategy.  In order for Next or HasNext to
 // succeed, any one of the included strategies must succeed
-type Any []RetryStrategy
+type Any []Strategy
 
 func (s Any) Next() bool {
 	// Call all strategies even one returns true

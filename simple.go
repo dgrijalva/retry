@@ -6,7 +6,7 @@ type SimpleStrategy struct {
 }
 
 // Type validation
-var _ RetryStrategy = &SimpleStrategy{}
+var _ Strategy = &SimpleStrategy{}
 
 func (s *SimpleStrategy) Next() bool {
 	if s.count < s.Tries {

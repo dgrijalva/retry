@@ -27,7 +27,7 @@ type testCase struct {
 	step        time.Duration // how far to step time forward after each iteration
 }
 
-func tryCase(t *testing.T, strategy RetryStrategy, test testCase) {
+func tryCase(t *testing.T, strategy Strategy, test testCase) {
 
 	// Time
 	start := time.Now()
