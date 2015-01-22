@@ -9,7 +9,8 @@ func TestSimpleStrategy(t *testing.T) {
 		tryCase(t, &SimpleStrategy{Tries: test}, testCase{
 			name:     test,
 			attempts: test + 1,
-			limit:    test,
+			minimum:  test,
+			maximum:  test,
 		})
 	}
 }
