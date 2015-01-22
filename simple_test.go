@@ -21,15 +21,3 @@ func TestSimpleStrategy(t *testing.T) {
 	}
 }
 
-func TestSimpleStrategyHasNext(t *testing.T) {
-	for _, test := range []int{1, 2, 5, 100} {
-		var count int = 0
-		Do(&SimpleStrategy{Tries: test}, func() bool {
-			count++
-			return false
-		})
-		if count != test {
-			t.Errorf("Expected attempts: %v Actual: %v", test, count)
-		}
-	}
-}
