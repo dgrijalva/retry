@@ -23,12 +23,15 @@ func (s All) HasNext() bool {
 type Any []RetryStrategy
 
 func (s Any) Next() bool {
+	// Call all strategies even one returns true
+	// otherwise, they might lose count
+	var succ = false
 	for _, ss := range s {
 		if ss.Next() {
-			return true
+			succ = true
 		}
 	}
-	return true
+	return succ
 }
 
 func (s Any) HasNext() bool {
