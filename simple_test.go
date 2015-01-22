@@ -5,7 +5,7 @@ import (
 )
 
 func TestSimpleStrategy(t *testing.T) {
-	for _, test := range []int{1, 2, 5, 100} {
+	for _, test := range []int{0, 1, 2, 5, 100} {
 		var count int = 0
 		var strategy = &SimpleStrategy{Tries: test}
 		Do(strategy, func() bool {
