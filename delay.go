@@ -1,6 +1,7 @@
 package retry
 
 import (
+	"math"
 	"time"
 )
 
@@ -25,4 +26,35 @@ func (s *DelayStrategy) Next() bool {
 
 func (s *DelayStrategy) HasNext() bool {
 	return true
+}
+
+// Exponential backoff.  No iteration limit, but it gets
+// slower every time.  Reset clears the count, but does not
+// reset the last time.
+type ExponentialBackoffStrategy struct {
+	InitialDelay time.Duration
+	count        float64
+	lastTime     time.Time
+}
+
+func (s *ExponentialBackoffStrategy) Next() bool {
+	if !s.lastTime.IsZero() {
+		nextDelay := time.Duration(math.Pow(s.count, 2)) * s.InitialDelay
+		timeSince := time.Now().Sub(s.lastTime)
+		if timeSince < nextDelay {
+			time.Sleep(nextDelay - timeSince)
+		}
+	}
+
+	s.lastTime = time.Now()
+	s.count++
+	return true
+}
+
+func (s *ExponentialBackoffStrategy) HasNext() bool {
+	return true
+}
+
+func (s *ExponentialBackoffStrategy) Reset() {
+	s.count = 0
 }
