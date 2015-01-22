@@ -32,13 +32,19 @@ func (s *DelayStrategy) HasNext() bool {
 // slower every time.  Resettable.
 type ExponentialBackoffStrategy struct {
 	InitialDelay time.Duration
+	MaxDelay     time.Duration // default: no limit
 	count        float64
 	lastTime     time.Time
 }
 
 func (s *ExponentialBackoffStrategy) Next() bool {
 	if !s.lastTime.IsZero() {
+		// Calculate the next delay
 		nextDelay := time.Duration(math.Pow(s.count, 2)) * s.InitialDelay
+		if s.MaxDelay > 0 && nextDelay > s.MaxDelay {
+			nextDelay = s.MaxDelay
+		}
+
 		timeSince := TimeFunc().Sub(s.lastTime)
 		if timeSince < nextDelay {
 			SleepFunc(nextDelay - timeSince)

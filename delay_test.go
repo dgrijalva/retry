@@ -20,13 +20,15 @@ func TestExponentialBackoffStrategy(t *testing.T) {
 	for _, test := range []struct {
 		iterations int
 		initial    time.Duration
+		maxWait    time.Duration
 		duration   time.Duration
 	}{
-		{2, time.Microsecond, time.Microsecond},
-		{3, time.Millisecond, 5 * time.Millisecond},
-		{5, time.Millisecond, 30 * time.Millisecond},
+		{2, time.Microsecond, 0, time.Microsecond},
+		{3, time.Millisecond, 0, 5 * time.Millisecond},
+		{5, time.Millisecond, 0, 30 * time.Millisecond},
+		{5, time.Millisecond, 2 * time.Millisecond, 8 * time.Millisecond},
 	} {
-		tryCase(t, &ExponentialBackoffStrategy{InitialDelay: test.initial}, testCase{
+		tryCase(t, &ExponentialBackoffStrategy{InitialDelay: test.initial, MaxDelay: test.maxWait}, testCase{
 			name:        test,
 			attempts:    test.iterations,
 			minDuration: test.duration,
