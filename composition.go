@@ -1,5 +1,7 @@
 package retry
 
+// A composite strategy.  In order for Next or HasNext to
+// succeed, all of the included strategies must succeed
 type All []RetryStrategy
 
 func (s All) Next() bool {
@@ -20,6 +22,8 @@ func (s All) HasNext() bool {
 	return true
 }
 
+// A composite strategy.  In order for Next or HasNext to
+// succeed, any one of the included strategies must succeed
 type Any []RetryStrategy
 
 func (s Any) Next() bool {
