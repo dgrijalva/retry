@@ -4,10 +4,12 @@ import (
 	"time"
 )
 
-// Set this to override how now is discovered and how sleeping is done
+// Set these to override how now is discovered and how sleeping is done
 // This is mostly useful for testing, but you never know
-var TimeFunc = time.Now
-var SleepFunc = time.Sleep
+var (
+	TimeFunc  = time.Now
+	SleepFunc = time.Sleep
+)
 
 // This is the main interface around which this library is
 // built.  It defines a very simple interface for abstracting retry
