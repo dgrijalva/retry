@@ -7,8 +7,8 @@ Some examples:
 ```go
 // A very basic example.
 strategy := &retry.SimpleStrategy{Tries: 3}
-for strategy.Next() {
-	trySomething()
+for done := false; !done && strategy.Next() {
+	done = trySomething()
 }
 ```
 
@@ -20,8 +20,8 @@ strategy := &retry.All{
 	&retry.DelayStrategy{Delay: 100 * time.Millisecond},
 }
 
-for strategy.Next() {
-	trySomething()
+for done := false; !done && strategy.Next() {
+	done = trySomething()
 }
 ```
 
@@ -38,8 +38,8 @@ strategy := &retry.Any{
 	&retry.SimpleStrategy{Tries: 3},
 }
 
-for strategy.Next() {
-	trySomething()
+for done := false; !done && strategy.Next() {
+	done = trySomething()
 }
 ```
 
