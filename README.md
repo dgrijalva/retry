@@ -1,6 +1,6 @@
 An interface for and collection of various implementations of retry behavior, designed to be easy to use and composable.
 
-The interface is inspired by [`AttemptStrategy`](http://godoc.org/github.com/crowdmob/goamz/aws#AttemptStrategy) in `github.com/crowdmob/goamz/aws`.  On top of being fairly useful, this library is a good illustration of the usefulness of interfaces in go.  Use a single strategy or combine a few together to easily accomplish what is normally a bit of a chore.
+The interface is inspired by [`AttemptStrategy`](http://godoc.org/github.com/crowdmob/goamz/aws#AttemptStrategy) in [`github.com/crowdmob/goamz/aws`](https://github.com/crowdmob/goamz).  On top of being fairly useful, this library is a good illustration of the usefulness of interfaces in go.  Use a single strategy or combine a few together to easily accomplish what is normally a bit of a chore.
 
 Some examples:
 
