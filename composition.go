@@ -31,7 +31,7 @@ func (s Any) Next() bool {
 	return true
 }
 
-func (s All) HasNext() bool {
+func (s Any) HasNext() bool {
 	for _, ss := range s {
 		if ss.HasNext() {
 			return true
