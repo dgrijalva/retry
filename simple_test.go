@@ -20,4 +20,3 @@ func TestSimpleStrategy(t *testing.T) {
 		}
 	}
 }
-
