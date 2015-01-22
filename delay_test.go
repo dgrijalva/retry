@@ -11,7 +11,7 @@ func TestDelayStrategy(t *testing.T) {
 			name:        test,
 			attempts:    3,
 			minDuration: 2 * test,
-			maxDuration: (3 * test) + time.Millisecond,
+			maxDuration: (3 * test) + (time.Millisecond / 2),
 		})
 	}
 }
