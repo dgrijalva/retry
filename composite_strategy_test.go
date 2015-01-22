@@ -36,19 +36,25 @@ func TestMinIterationsAndMaxTime(t *testing.T) {
 		duration      time.Duration
 		step          time.Duration
 	}{
-		{1000, 2, 2, time.Millisecond, time.Millisecond / 2},
+		{1000, 2, 4, time.Millisecond, time.Millisecond / 3},
 		{1000, 10, 30, time.Millisecond, time.Millisecond / 9},
 	} {
-		tryCase(t, &All{
-			&SimpleStrategy{Tries: test.maxIterations},
-			&MaximumTimeStrategy{Duration: test.duration},
-			&DelayStrategy{Wait: test.step},
+		// At least minIterations
+		// At most duration
+		// At least step between iterations
+		tryCase(t, &Any{
+			&SimpleStrategy{Tries: test.minIterations},
+			&All{
+				&MaximumTimeStrategy{Duration: test.duration},
+				&DelayStrategy{Wait: test.step},
+			},
 		}, testCase{
 			name:        test,
 			attempts:    test.attempts,
 			minimum:     test.minIterations,
 			maximum:     test.maxIterations,
 			maxDuration: test.duration,
+			step:        time.Millisecond / 100,
 		})
 	}
 
