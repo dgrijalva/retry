@@ -14,13 +14,13 @@ type DelayStrategy struct {
 
 func (s *DelayStrategy) Next() bool {
 	if !s.lastTime.IsZero() {
-		timeSince := time.Now().Sub(s.lastTime)
+		timeSince := TimeFunc().Sub(s.lastTime)
 		if timeSince < s.Wait {
-			time.Sleep(s.Wait - timeSince)
+			SleepFunc(s.Wait - timeSince)
 		}
 	}
 
-	s.lastTime = time.Now()
+	s.lastTime = TimeFunc()
 	return true
 }
 
@@ -29,8 +29,7 @@ func (s *DelayStrategy) HasNext() bool {
 }
 
 // Exponential backoff.  No iteration limit, but it gets
-// slower every time.  Reset clears the count, but does not
-// reset the last time.
+// slower every time.  Resettable.
 type ExponentialBackoffStrategy struct {
 	InitialDelay time.Duration
 	count        float64
@@ -40,13 +39,13 @@ type ExponentialBackoffStrategy struct {
 func (s *ExponentialBackoffStrategy) Next() bool {
 	if !s.lastTime.IsZero() {
 		nextDelay := time.Duration(math.Pow(s.count, 2)) * s.InitialDelay
-		timeSince := time.Now().Sub(s.lastTime)
+		timeSince := TimeFunc().Sub(s.lastTime)
 		if timeSince < nextDelay {
-			time.Sleep(nextDelay - timeSince)
+			SleepFunc(nextDelay - timeSince)
 		}
 	}
 
-	s.lastTime = time.Now()
+	s.lastTime = TimeFunc()
 	s.count++
 	return true
 }
@@ -56,5 +55,39 @@ func (s *ExponentialBackoffStrategy) HasNext() bool {
 }
 
 func (s *ExponentialBackoffStrategy) Reset() {
+	var t time.Time
+	s.lastTime = t
 	s.count = 0
+}
+
+// Maximum time strategy.  No iteration limit.  Limit on max time.
+// Timer starts automatically on first try. Resettable
+type MaximumTimeStrategy struct {
+	Duration  time.Duration
+	startTime time.Time
+}
+
+func (s *MaximumTimeStrategy) Next() bool {
+	if s.startTime.IsZero() {
+		s.startTime = TimeFunc()
+		return true
+	}
+
+	return s.HasNext()
+}
+
+func (s *MaximumTimeStrategy) elapsed() time.Duration {
+	if s.startTime.IsZero() {
+		return 0
+	}
+	return TimeFunc().Sub(s.startTime)
+}
+
+func (s *MaximumTimeStrategy) HasNext() bool {
+	return s.elapsed() < s.Duration
+}
+
+func (s *MaximumTimeStrategy) Reset() {
+	var t time.Time
+	s.startTime = t
 }
