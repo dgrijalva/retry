@@ -46,7 +46,7 @@ func tryCase(t *testing.T, strategy RetryStrategy, test testCase) {
 	}
 
 	if d := time.Now().Sub(start); test.minDuration > 0 && d < test.minDuration {
-		t.Errorf("[%v] Test too less time: %v than the minimum", test.name, d, test.minDuration)
+		t.Errorf("[%v] Test took less time: %v than the minimum: %v", test.name, d, test.minDuration)
 	}
 
 }
