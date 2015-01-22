@@ -26,6 +26,24 @@ for strategy.Next() {
 ```
 
 ```go
+// More complex composition:
+// Delay of 100ms between tries
+// Keep trying for up to 10s
+// At least 3 tries
+strategy := &retry.Any{
+	&retry.All{
+		&retry.DelayStrategy{Delay: 100 * time.Millisecond},
+		&retry.MaximumTimeStrategy{Duration: 10 * time.Second},
+	},
+	&retry.SimpleStrategy{Tries: 3},
+}
+
+for strategy.Next() {
+	trySomething()
+}
+```
+
+```go
 // Separate retry logic from a more complex function
 func doComplexThings(strategy retry.Strategy)bool{
 	for strategy.Next() {
