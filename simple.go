@@ -1,5 +1,6 @@
 package retry
 
+// Retry forever.  No waiting.
 type AlwaysRetryStrategy struct{}
 
 func (s *AlwaysRetryStrategy) Next() bool {
@@ -10,13 +11,11 @@ func (s *AlwaysRetryStrategy) HasNext() bool {
 	return true
 }
 
+// Try up to a fixed number of times
 type CountStrategy struct {
 	Tries int
 	count int
 }
-
-// Type validation
-var _ Strategy = &CountStrategy{}
 
 func (s *CountStrategy) Next() bool {
 	if s.count < s.Tries {
@@ -28,4 +27,8 @@ func (s *CountStrategy) Next() bool {
 
 func (s *CountStrategy) HasNext() bool {
 	return s.count < s.Tries
+}
+
+func (s *CountStrategy) Reset() {
+	s.count = 0
 }
