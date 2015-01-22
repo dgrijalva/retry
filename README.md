@@ -37,5 +37,6 @@ func doComplexThings(strategy retry.Strategy)bool{
 }
 
 doComplexThings(&retry.SimpleStrategy{Tries: 3})
+doComplexThings(&retry.MaximumTimeStrategy{Duration: 10 * time.Second})
 ```
 
