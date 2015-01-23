@@ -32,3 +32,21 @@ func (s *CountStrategy) HasNext() bool {
 func (s *CountStrategy) Reset() {
 	s.count = 0
 }
+
+// Always retry until canceled.  Use And to combine this
+// with other strategies to make them cancelable
+type CancelableRetryStrategy struct {
+	canceled bool
+}
+
+func (s *CancelableRetryStrategy) Next() bool {
+	return !s.canceled
+}
+
+func (s *CancelableRetryStrategy) HasNext() bool {
+	return !s.canceled
+}
+
+func (s *CancelableRetryStrategy) Cancel() {
+	s.canceled = true
+}
