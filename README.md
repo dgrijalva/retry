@@ -30,12 +30,12 @@ for done := false; !done && strategy.Next() {
 // Delay of 100ms between tries
 // Keep trying for up to 10s
 // At least 3 tries
-strategy := &retry.Any{
-	&retry.All{
-		&retry.DelayStrategy{Delay: 100 * time.Millisecond},
+strategy := &retry.All{
+	&retry.Any{
 		&retry.MaximumTimeStrategy{Duration: 10 * time.Second},
+		&retry.CountStrategy{Tries: 3},
 	},
-	&retry.CountStrategy{Tries: 3},
+	&retry.DelayStrategy{Delay: 100 * time.Millisecond},
 }
 
 for done := false; !done && strategy.Next() {
